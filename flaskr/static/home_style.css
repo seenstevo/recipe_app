@@ -1,0 +1,83 @@
+.recipe-boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 20px;
+  }
+  
+  .recipe-box {
+    background-color: #6B7A8F;
+    box-shadow: 8px 12px #6b7a8f00;
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+    border: thick solid grey;
+  }
+  
+  .recipe-box h2 {
+    margin-top: 0;
+  }
+  
+  .recipe-box a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .add-recipe-button {
+    display: block;
+    margin-top: 20px;
+  }
+  
+  .recipe-box a[href*="edit"] {
+    background-color: #F7882F;
+    color: black;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .recipe-box a[href*="delete"] {
+    background-color: #F7C331;
+  }
+
+  body {
+    background-color: #DCC7AA;
+  }
+
+  .add-recipe-button {
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    font-size: 24px;
+    background-color: #F7C331;
+    padding: 20px;
+    border-radius: 25px;
+    border: thick solid black;
+  }
+
+  form button[type="submit"] {
+    background-color: #F7C331;
+    color: black;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  input[type="submit"] {
+    background-color: #F7882F;
+    color: white;
+    border-radius: 20px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+
+  input[type="number"] {
+    width: 50px; /* Adjust the width as needed */
+  }
+  

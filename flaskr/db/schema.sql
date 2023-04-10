@@ -1,0 +1,25 @@
+DROP TABLE IF EXISTS recipes;
+DROP TABLE IF EXISTS recipe_items;
+DROP TABLE IF EXISTS items;
+
+CREATE TABLE recipes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  category VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE recipe_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  recipe_id INT NOT NULL,
+  item_id INT NOT NULL,
+  quantity INT NOT NULL,
+  FOREIGN KEY (recipe_id) REFERENCES recipes(id),
+  FOREIGN KEY (item_id) REFERENCES items(id)
+);
+
+CREATE TABLE items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  category VARCHAR(255) NOT NULL,
+  unit VARCHAR(255) NOT NULL
+);

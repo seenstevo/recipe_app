@@ -1,0 +1,6 @@
+*.pyc
+__pycache__/
+notes.md
+recipe_app.code-workspace
+tests/
+instance/

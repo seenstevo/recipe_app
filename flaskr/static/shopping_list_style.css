@@ -1,0 +1,39 @@
+.shopping-list {
+    display: grid;
+    grid-gap: 10px;
+    float: left;
+    width: 15%;
+    background-color: #F7882F;
+  }
+  
+  
+  .full-recipes {
+    display: grid;
+    float: left;
+    width: 15%;
+    background-color: #6B7A8F;
+  }
+  
+  table {
+    border-collapse: collapse;
+  }
+  
+  th,
+  td {
+    padding: 5px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #F7C331;
+  }
+  
+
+  body {
+    background-color: #DCC7AA;
+  }
+  
+  h1,
+  h2 {
+    color: var(--primary-color);
+  }

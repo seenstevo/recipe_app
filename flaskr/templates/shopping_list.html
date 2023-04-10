@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Shopping List</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='shopping_list_style.css') }}">
+  </head>
+  <body>
+    <div class="shopping-list">
+      <h1>Shopping List</h1>
+      <table>
+        {% for column in shopping_list.columns %}
+          <th>{{ column }}</th>
+        {% endfor %}
+        {% for row in shopping_list.values %}
+          <tr>
+            {% for value in row %}
+              <td>{{ value }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <div class="full-recipes">
+      <h1>Full Recipes</h1>
+      {% for recipe_name, recipe in full_recipes.items() %}
+        <h2>{{ recipe_name }}</h2>
+        <table>
+          {% for column in recipe.columns %}
+            <th>{{ column }}</th>
+          {% endfor %}
+          {% for row in recipe.values %}
+            <tr>
+              {% for value in row %}
+                <td>{{ value }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </table>
+      {% endfor %}
+    </div>
+    <div class="return-home">
+      <a href="{{ url_for('home') }}">Return to Home Page</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+.form-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  label {
+    display: inline-block;
+    width: 150px;
+    text-align: right;
+    margin-right: 10px;
+  }
+  
+  input[type="text"],
+  select {
+    width: 200px;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  input[name="name"] {
+    width: 400px;
+  }
+  
+  select[name="category"] {
+    width: 200px;
+  }
+  
+  h2 {
+    clear: both;
+    text-align: center;
+  }
+  
+  #ingredients div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  #ingredients label {
+    width: 100px;
+    margin-right: 10px
+  }
