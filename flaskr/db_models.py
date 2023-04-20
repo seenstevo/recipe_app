@@ -6,7 +6,8 @@ class Recipe(db.Model):
     __tablename__ = 'recipes'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
-    category = db.Column(db.String(255), nullable=False)
+    category1 = db.Column(db.String(255), nullable=False)
+    category2 = db.Column(db.String(255), nullable=False)
 
 
 class RecipeItem(db.Model):

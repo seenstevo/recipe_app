@@ -34,14 +34,15 @@ def home():
 def add_recipe():
     if request.method == 'POST':
         name = request.form['name']
-        category_name = request.form['category']
+        category1_name = request.form['category1']
+        category2_name = request.form['category2']
         form_dict = {key: request.form.getlist(key) for key in request.form.keys() if key.endswith('[]')}
         ingredients = form_dict.get('ingredient[]')
         quantities = form_dict.get('quantity[]')
         units = form_dict.get('units[]')
         
         # Create recipe object
-        recipe = Recipe(name=name, category=category_name)
+        recipe = Recipe(name = name, category1 = category1_name, category2 = category2_name)
         
         db.session.add(recipe)
 
@@ -151,11 +152,12 @@ def generate_shopping_list():
     recipes = Recipe.query.all()
     while True:
         choices = np.random.choice(recipes, number, replace = False)
-        recipe_categories = [choice.category for choice in choices]
+        recipe_category1 = [choice.category1 for choice in choices]
+        recipe_category2 = [choice.category2 for choice in choices]
         recipe_names = [choice.name for choice in choices]
         recipe_ids = [choice.id for choice in choices]
         # here we ensure that we have chosen from at least 3 categories or if selected recipes is less than 3
-        if (len(set(recipe_categories)) > 2) or number < 3:
+        if (len(set(recipe_category1)) > 1) or (len(set(recipe_category2)) > 1) or (number < 3):
             break
     
     all_ingredients = db.session.query(Item.name, RecipeItem.quantity, Item.unit)\
