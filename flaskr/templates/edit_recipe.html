@@ -36,9 +36,9 @@
           <label for="quantity">Quantity:</label>
           <input type="text" name="quantities[]" value="{{ item[1] }}" required>
           <label for="units">Units:</label>
-          <input type="text" name="units[]" value="{{ item[2] }}">
+          <input type="text" name="units[]" value="{{ item[2] }}" required>
           <label for="section">Section:</label>
-          <select name="shop_section[]">
+          <select name="shop_sections[]">
             <option value="Fruit and Veg" {% if item[3] == 'Fruit and Veg' %}selected{% endif %}>Fruit and Veg</option>
             <option value="Meat and Fish" {% if item[3] == 'Meat and Fish' %}selected{% endif %}>Meat and Fish</option>
             <option value="Dairy" {% if item[3] == 'Dairy' %}selected{% endif %}>Dairy</option>
@@ -69,7 +69,7 @@
                                 <label for="units">Units:</label> \
                                 <input type="text" name="units[]"> \
                                 <label for="section">Section:</label> \
-                                <select name="shop_section[]" required> \
+                                <select name="shop_sections[]" required> \
                                   <option value="Fruit and Veg">Fruit and Veg</option> \
                                   <option value="Meat and Fish">Meat and Fish</option> \
                                   <option value="Dairy">Dairy</option> \

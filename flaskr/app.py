@@ -37,10 +37,10 @@ def add_recipe():
         category1_name = request.form['category1']
         category2_name = request.form['category2']
         form_dict = {key: request.form.getlist(key) for key in request.form.keys() if key.endswith('[]')}
-        ingredients = form_dict.get('ingredient[]')
-        quantities = form_dict.get('quantity[]')
+        ingredients = form_dict.get('ingredients[]')
+        quantities = form_dict.get('quantities[]')
         units = form_dict.get('units[]')
-        sections = form_dict.get('shop_section[]')
+        sections = form_dict.get('shop_sections[]')
         
         # Create recipe object
         recipe = Recipe(name = name, category1 = category1_name, category2 = category2_name)
@@ -52,15 +52,16 @@ def add_recipe():
             ingredient_name = ingredients[i]
             quantity = quantities[i]
             unit = units[i]
-            section = sections[i]
-
-            ingredient = Item.query.filter_by(name=ingredient_name, unit=unit).first()
-
+            section = sections[i]         
+            
+            # Check if the ingredient already exists in the database
+            ingredient = Item.query.filter_by(name = ingredient_name, unit = unit, shop_section = section).first()
             if not ingredient:
-                ingredient = Item(name=ingredient_name, unit=unit, shop_section=section)
+                ingredient = Item(name = ingredient_name, unit = unit, shop_section = section)
                 db.session.add(ingredient)
 
-            recipe_ingredient = RecipeItem(recipe=recipe, item=ingredient, quantity=quantity)
+            # here we add in the recipe object and ingredient object which puts the foreign keys as needed for recipe_id and item_id
+            recipe_ingredient = RecipeItem(recipe = recipe, item = ingredient, quantity = quantity)
             db.session.add(recipe_ingredient)
 
         db.session.commit()
@@ -108,13 +109,10 @@ def edit_recipe(id):
         ingredients = form_dict.get('ingredients[]')
         quantities = form_dict.get('quantities[]')
         units = form_dict.get('units[]')
-        sections = form_dict.get('shop_section[]')
+        sections = form_dict.get('shop_sections[]')
         
-        # then delete these from tables
+        # then clear the RecipeItems rows for this recipe to be re-populated after editing with Items
         RecipeItem.query.filter_by(recipe_id = id).delete()
-        item_id_index = 4
-        item_ids = [item[item_id_index] for item in previous_ingredients]
-        Item.query.filter(Item.id.in_(item_ids)).delete()
         db.session.commit()
 
         # add back in the row in the Recipe table with recipe name and category

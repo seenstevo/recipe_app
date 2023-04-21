@@ -31,13 +31,13 @@
       <div id="ingredients">
         <div>
           <label for="ingredient">Ingredient:</label>
-          <input type="text" name="ingredient[]" required>
+          <input type="text" name="ingredients[]" required>
           <label for="quantity">Quantity:</label>
-          <input type="text" name="quantity[]" required>
+          <input type="text" name="quantities[]" required>
           <label for="units">Units:</label>
-          <input type="text" name="units[]">
+          <input type="text" name="units[]" required>
           <label for="section">Section:</label>
-          <select name="shop_section[]">
+          <select name="shop_sections[]">
             <option value="Fruit and Veg">Fruit and Veg</option>
             <option value="Meat and Fish">Meat and Fish</option>
             <option value="Dairy">Dairy</option>
@@ -61,11 +61,24 @@
       function addIngredient() {
         var ingredient = document.createElement("div");
         ingredient.innerHTML = '<label for="ingredient">Ingredient:</label> \
-                                <input type="text" name="ingredient[]" required> \
+                                <input type="text" name="ingredients[]" required> \
                                 <label for="quantity">Quantity:</label> \
-                                <input type="text" name="quantity[]" required> \
+                                <input type="text" name="quantities[]" required> \
                                 <label for="units">Units:</label> \
                                 <input type="text" name="units[]"> \
+                                <label for="section">Section:</label> \
+                                <select name="shop_sections[]" required> \
+                                  <option value="Fruit and Veg">Fruit and Veg</option> \
+                                  <option value="Meat and Fish">Meat and Fish</option> \
+                                  <option value="Dairy">Dairy</option> \
+                                  <option value="Bakery">Bakery</option> \
+                                  <option value="Nuts and Seeds">Nuts and Seeds</option> \
+                                  <option value="Sauces">Sauces</option> \
+                                  <option value="Tins">Tins</option> \
+                                  <option value="Grains and Pulses">Grains and Pulses</option> \
+                                  <option value="Spices">Spices</option> \
+                                  <option value="Frozen">Frozen</option> \
+                                </select><br><br> \
                                 <button type="button" onclick="removeIngredient(this)">Delete</button>';
         document.getElementById("ingredients").appendChild(ingredient);
       }
