@@ -112,6 +112,7 @@ def edit_recipe(id):
         sections = form_dict.get('shop_sections[]')
         
         # then clear the RecipeItems rows for this recipe to be re-populated after editing with Items
+        # This can mean that some Items can become stranded on the 
         RecipeItem.query.filter_by(recipe_id = id).delete()
         db.session.commit()
 
