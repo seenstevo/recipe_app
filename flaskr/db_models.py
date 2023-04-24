@@ -25,6 +25,7 @@ class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     unit = db.Column(db.String(255), nullable=False)
+    shop_section = db.Column(db.String(255), nullable=False)
     
 
 

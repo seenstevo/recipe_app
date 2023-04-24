@@ -2,7 +2,7 @@
     display: grid;
     grid-gap: 10px;
     float: left;
-    width: 30%;
+    width: 50%;
     background-color: #F7882F;
   }
   
@@ -10,7 +10,7 @@
   .full-recipes {
     display: grid;
     float: left;
-    width: 30%;
+    width: 50%;
     background-color: #6B7A8F;
   }
   

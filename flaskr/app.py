@@ -37,9 +37,10 @@ def add_recipe():
         category1_name = request.form['category1']
         category2_name = request.form['category2']
         form_dict = {key: request.form.getlist(key) for key in request.form.keys() if key.endswith('[]')}
-        ingredients = form_dict.get('ingredient[]')
-        quantities = form_dict.get('quantity[]')
+        ingredients = form_dict.get('ingredients[]')
+        quantities = form_dict.get('quantities[]')
         units = form_dict.get('units[]')
+        sections = form_dict.get('shop_sections[]')
         
         # Create recipe object
         recipe = Recipe(name = name, category1 = category1_name, category2 = category2_name)
@@ -51,14 +52,16 @@ def add_recipe():
             ingredient_name = ingredients[i]
             quantity = quantities[i]
             unit = units[i]
-
-            ingredient = Item.query.filter_by(name=ingredient_name, unit=unit).first()
-
+            section = sections[i]         
+            
+            # Check if the ingredient already exists in the database
+            ingredient = Item.query.filter_by(name = ingredient_name, unit = unit, shop_section = section).first()
             if not ingredient:
-                ingredient = Item(name=ingredient_name, unit=unit)
+                ingredient = Item(name = ingredient_name, unit = unit, shop_section = section)
                 db.session.add(ingredient)
 
-            recipe_ingredient = RecipeItem(recipe=recipe, item=ingredient, quantity=quantity)
+            # here we add in the recipe object and ingredient object which puts the foreign keys as needed for recipe_id and item_id
+            recipe_ingredient = RecipeItem(recipe = recipe, item = ingredient, quantity = quantity)
             db.session.add(recipe_ingredient)
 
         db.session.commit()
@@ -93,23 +96,23 @@ def edit_recipe(id):
     recipe = Recipe.query.get_or_404(id)
     
     # first save all rows from RecipeItems and Items tables for the recipe
-    previous_ingredients = db.session.query(Item.name, RecipeItem.quantity, Item.unit, Item.id)\
+    previous_ingredients = db.session.query(Item.name, RecipeItem.quantity, Item.unit, Item.shop_section, Item.id)\
         .join(RecipeItem, Item.id == RecipeItem.item_id)\
         .filter(RecipeItem.recipe_id == id)\
         .all()
         
     if request.method == 'POST':
         name = request.form['name']
-        category_name = request.form['category']
+        category1_name = request.form['category1']
+        category2_name = request.form['category2']
         form_dict = {key: request.form.getlist(key) for key in request.form.keys() if key.endswith('[]')}
         ingredients = form_dict.get('ingredients[]')
         quantities = form_dict.get('quantities[]')
         units = form_dict.get('units[]')
+        sections = form_dict.get('shop_sections[]')
         
-        # then delete these from tables
+        # then clear the RecipeItems rows for this recipe to be re-populated after editing with Items
         RecipeItem.query.filter_by(recipe_id = id).delete()
-        item_ids = [ingredient[3] for ingredient in previous_ingredients]
-        Item.query.filter(Item.id.in_(item_ids)).delete(synchronize_session=False)
         db.session.commit()
 
         # add back in the row in the Recipe table with recipe name and category
@@ -117,7 +120,8 @@ def edit_recipe(id):
         recipe = Recipe.query.filter_by(id=id).first()
         # Update the recipe name and category
         recipe.name = name
-        recipe.category = category_name
+        recipe.category1 = category1_name
+        recipe.category2 = category2_name
         # Commit the changes to the database
         db.session.commit()
 
@@ -127,19 +131,27 @@ def edit_recipe(id):
             ingredient_name = ingredients[i]
             quantity = quantities[i]
             unit = units[i]
+            section = sections[i]
+            
+            # Check if the ingredient already exists in the database
+            ingredient = Item.query.filter_by(name = ingredient_name, unit = unit, shop_section = section).first()
+            if ingredient is None:
+                # If the ingredient doesn't exist, create a new row
+                ingredient = Item(name=ingredient_name, unit=unit, shop_section=section)
+                db.session.add(ingredient)
 
-            ingredient = Item(name = ingredient_name, unit = unit)
-            db.session.add(ingredient)
-            ingredient = Item.query.filter_by(name = ingredient_name).first()
+            #ingredient = Item(name = ingredient_name, unit = unit, shop_section = section)
+            #db.session.add(ingredient)
 
             recipe_ingredient = RecipeItem(recipe_id = recipe.id, item_id = ingredient.id, quantity = quantity)
             db.session.add(recipe_ingredient)
 
-        db.session.commit()
+            db.session.commit()
     
         return redirect(url_for('home'))
 
-    return render_template('edit_recipe.html', ingredients = previous_ingredients, recipe = recipe.name, category = recipe.category)
+    return render_template('edit_recipe.html', ingredients = previous_ingredients, recipe = recipe.name, 
+                           category1 = recipe.category1, category2 = recipe.category2)
 
 
 # endpoint for generating a shopping list
@@ -156,14 +168,16 @@ def generate_shopping_list():
         recipe_category2 = [choice.category2 for choice in choices]
         recipe_names = [choice.name for choice in choices]
         recipe_ids = [choice.id for choice in choices]
+        # need to fix the logic for ensuring a balanced selection of recipes
         # here we ensure that we have chosen from at least 3 categories or if selected recipes is less than 3
-        if (len(set(recipe_category1)) > 1) or (len(set(recipe_category2)) > 1) or (number < 3):
+        if (len(set(recipe_category1)) > 2) or (len(set(recipe_category2)) > 2) or (number < 3):
             break
     
-    all_ingredients = db.session.query(Item.name, RecipeItem.quantity, Item.unit)\
+    all_ingredients = db.session.query(Item.name, RecipeItem.quantity, Item.unit, Item.shop_section)\
         .join(RecipeItem, Item.id == RecipeItem.item_id)\
         .filter(RecipeItem.recipe_id.in_(recipe_ids))\
         .all()
+    print(all_ingredients)
     all_ingredients = pd.DataFrame(all_ingredients)
     
     full_recipes = {}
@@ -174,8 +188,10 @@ def generate_shopping_list():
             .all()
         full_recipes[recipe_names[i]] = pd.DataFrame(full_recipe)
     
-    shopping_list = all_ingredients.groupby(['name', 'unit'], as_index = False)['quantity'].sum()
-    shopping_list = shopping_list[['name', 'quantity', 'unit']]
+    shopping_list = (all_ingredients.groupby(['name', 'unit', 'shop_section'], as_index = False)['quantity']
+                     .sum())
+    shopping_list = (shopping_list.sort_values(by = 'shop_section')
+                     [['name', 'quantity', 'unit']])
 
     return render_template('shopping_list.html', shopping_list = shopping_list, full_recipes = full_recipes)
 

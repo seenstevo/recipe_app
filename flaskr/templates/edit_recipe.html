@@ -10,13 +10,21 @@
       <label for="name">Recipe Name:</label>
       <input type="text" name="name" value="{{ recipe }}" required><br><br>
       
-      <label for="category">Category:</label>
-      <select name="category">
-        <option value="Veggie" {% if recipe.category == "Veggie" %} selected {% endif %}>Veggie</option>
-        <option value="Pasta" {% if recipe.category == "Pasta" %} selected {% endif %}>Pasta</option>
-        <option value="Meat" {% if recipe.category == "Meat" %} selected {% endif %}>Meat</option>
-        <option value="Legume" {% if recipe.category == "Legume" %} selected {% endif %}>Legume</option>
-        <option value="Fish" {% if recipe.category == "Fish" %} selected {% endif %}>Fish</option>
+      <label for="category1">Meal Type:</label>
+      <select name="category1" required>
+        <option value="Meat" {% if category1 == 'Meat' %}selected{% endif %}>Meat</option>
+        <option value="Fish" {% if category1 == 'Fish' %}selected{% endif %}>Fish</option>
+        <option value="Legume" {% if category1 == 'Legume' %}selected{% endif %}>Legume</option>
+        <option value="Veggie" {% if category1 == 'Veggie' %}selected{% endif %}>Veggie</option>
+      </select><br><br>
+
+      <label for="category2">Carb Base:</label>
+      <select name="category2" required>
+        <option value="Pasta" {% if category2 == 'Pasta' %}selected{% endif %}>Pasta</option>
+        <option value="Rice" {% if category2 == 'Rice' %}selected{% endif %}>Rice</option>
+        <option value="Potato" {% if category2 == 'Potato' %}selected{% endif %}>Potato</option>
+        <option value="Bread" {% if category2 == 'Bread' %}selected{% endif %}>Bread</option>
+        <option value="Side Dish" {% if category2 == 'Side Dish' %}selected{% endif %}>Side Dish</option>
       </select><br><br>
 
       <h2>Ingredients:</h2>
@@ -28,7 +36,20 @@
           <label for="quantity">Quantity:</label>
           <input type="text" name="quantities[]" value="{{ item[1] }}" required>
           <label for="units">Units:</label>
-          <input type="text" name="units[]" value="{{ item[2] }}">
+          <input type="text" name="units[]" value="{{ item[2] }}" required>
+          <label for="section">Section:</label>
+          <select name="shop_sections[]">
+            <option value="Fruit and Veg" {% if item[3] == 'Fruit and Veg' %}selected{% endif %}>Fruit and Veg</option>
+            <option value="Meat and Fish" {% if item[3] == 'Meat and Fish' %}selected{% endif %}>Meat and Fish</option>
+            <option value="Dairy" {% if item[3] == 'Dairy' %}selected{% endif %}>Dairy</option>
+            <option value="Bakery" {% if item[3] == 'Bakery' %}selected{% endif %}>Bakery</option>
+            <option value="Nuts and Seeds" {% if item[3] == 'Nuts and Seeds' %}selected{% endif %}>Nuts and Seeds</option>
+            <option value="Sauces" {% if item[3] == 'Sauces' %}selected{% endif %}>Sauces</option>
+            <option value="Tins" {% if item[3] == 'Tins' %}selected{% endif %}>Tins</option>
+            <option value="Grains and Pulses" {% if item[3] == 'Grains and Pulses' %}selected{% endif %}>Grains and Pulses</option>
+            <option value="Spices" {% if item[3] == 'Spices' %}selected{% endif %}>Spices</option>
+            <option value="Frozen" {% if item[3] == 'Frozen' %}selected{% endif %}>Frozen</option>
+          </select><br><br>
           <button type="button" onclick="removeIngredient(this)">Delete</button>
         </div>
         {% endfor %}
@@ -47,6 +68,19 @@
                                 <input type="text" name="quantities[]" required> \
                                 <label for="units">Units:</label> \
                                 <input type="text" name="units[]"> \
+                                <label for="section">Section:</label> \
+                                <select name="shop_sections[]" required> \
+                                  <option value="Fruit and Veg">Fruit and Veg</option> \
+                                  <option value="Meat and Fish">Meat and Fish</option> \
+                                  <option value="Dairy">Dairy</option> \
+                                  <option value="Bakery">Bakery</option> \
+                                  <option value="Nuts and Seeds">Nuts and Seeds</option> \
+                                  <option value="Sauces">Sauces</option> \
+                                  <option value="Tins">Tins</option> \
+                                  <option value="Grains and Pulses">Grains and Pulses</option> \
+                                  <option value="Spices">Spices</option> \
+                                  <option value="Frozen">Frozen</option> \
+                                </select><br><br> \
                                 <button type="button" onclick="removeIngredient(this)">Delete</button>';
         document.getElementById("ingredients").appendChild(ingredient);
       }
