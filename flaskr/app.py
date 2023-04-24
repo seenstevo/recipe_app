@@ -112,7 +112,6 @@ def edit_recipe(id):
         sections = form_dict.get('shop_sections[]')
         
         # then clear the RecipeItems rows for this recipe to be re-populated after editing with Items
-        # This can mean that some Items can become stranded on the 
         RecipeItem.query.filter_by(recipe_id = id).delete()
         db.session.commit()
 
@@ -140,9 +139,6 @@ def edit_recipe(id):
                 # If the ingredient doesn't exist, create a new row
                 ingredient = Item(name=ingredient_name, unit=unit, shop_section=section)
                 db.session.add(ingredient)
-
-            #ingredient = Item(name = ingredient_name, unit = unit, shop_section = section)
-            #db.session.add(ingredient)
 
             recipe_ingredient = RecipeItem(recipe_id = recipe.id, item_id = ingredient.id, quantity = quantity)
             db.session.add(recipe_ingredient)
@@ -178,7 +174,7 @@ def generate_shopping_list():
         .join(RecipeItem, Item.id == RecipeItem.item_id)\
         .filter(RecipeItem.recipe_id.in_(recipe_ids))\
         .all()
-    print(all_ingredients)
+
     all_ingredients = pd.DataFrame(all_ingredients)
     
     full_recipes = {}
