@@ -3,34 +3,42 @@
   <head>
     <meta charset="UTF-8">
     <title>Shopping List</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='shopping_list_style.css') }}">
   </head>
-  <body>
-    <div class="shopping-list">
-      <h1>Shopping List</h1>
-      <table>
-        {% for column in shopping_list.columns %}
-          <th>{{ column }}</th>
-        {% endfor %}
-        {% for row in shopping_list.values %}
+  <body style="background-color: #DCC7AA;">
+    <div class="shopping-list" style="display: grid; grid-gap: 5px; float: left; width: 30%; background-color: #F7882F;">
+      <h1 style="color: black;">Shopping List</h1>
+      <table style="border-collapse: collapse; width: 100%;">
+        <thead>
           <tr>
-            {% for value in row %}
-              <td>{{ value }}</td>
+            <th>Have</th>
+            {% for column in shopping_list.columns %}
+              <th>{{ column }}</th>
             {% endfor %}
           </tr>
-        {% endfor %}
+        </thead>
+        <tbody>
+          {% for row in shopping_list.values %}
+            <tr style="border: 1px solid black; padding: 8px; text-align: left;">
+              <td><input type="checkbox" id="{{ row }}" name="{{ row }}" class="checkbox" data-row="{{ loop.index0 }}" onclick="checkRow(this)" style="float: left;"><label for="{{ row }}" style="margin-left: 5px;"></label></td>
+              {% for value in row %}
+                <td>{{ value }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
       </table>
     </div>
-    <div class="full-recipes">
-      <h1>Full Recipes</h1>
+    
+    <div class="full-recipes" style="display: grid; float: left; width: 30%; background-color: #6B7A8F;">
+      <h1 style="color: black;">Full Recipes</h1>
       {% for recipe_name, recipe in full_recipes.items() %}
-        <h2>{{ recipe_name }}</h2>
-        <table>
+        <h2 style="color: black;">{{ recipe_name }}</h2>
+        <table style="border-collapse: collapse;">
           {% for column in recipe.columns %}
-            <th>{{ column }}</th>
+            <th style="padding: 5px; text-align: left; background-color: #F7C331;">{{ column }}</th>
           {% endfor %}
           {% for row in recipe.values %}
-            <tr>
+            <tr style="border: 1px solid black; padding: 5px; text-align: left;">
               {% for value in row %}
                 <td>{{ value }}</td>
               {% endfor %}
@@ -39,8 +47,22 @@
         </table>
       {% endfor %}
     </div>
-    <div class="return-home">
-      <a href="{{ url_for('home') }}">Return to Home Page</a>
+    
+    <div class="return-home" style="text-align: center;">
+      <a href="{{ url_for('home') }}" style="color: black;">Return to Home Page</a>
     </div>
+    
+    <script>
+      function checkRow(checkbox) {
+        var label = checkbox.nextSibling;
+        if (checkbox.checked) {
+          checkbox.parentNode.parentNode.style.textDecoration = "line-through";
+          checkbox.parentNode.parentNode.style.color = "gray";
+        } else {
+          checkbox.parentNode.parentNode.style.textDecoration = "none";
+          checkbox.parentNode.parentNode.style.color = "black";
+        }
+      }
+    </script>
   </body>
 </html>
